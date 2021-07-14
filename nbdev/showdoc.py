@@ -260,7 +260,8 @@ def _format_args(func):
             if len(arg.split(':')) > 1:
               nm, extra = arg.split(':')
               typ, docstr = extra.split(' # ')
-              argstring += f'\n* `{nm}`({typ}): {docstr}'
+              if '=' in typ: typ = typ.split('=')[0].lstrip()
+              argstring += f'\n* `{nm}`(`{typ}`): {docstr}'
         if has_arg: return argstring + '\n'
         else: return ''
     except: return ''
