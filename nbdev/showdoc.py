@@ -247,21 +247,23 @@ def _format_cls_doc(cls, full_name):
 def _format_args(func):
     "Generates doc string for function arguments"
     _pat = r'\(([^\)]+)\)'
-    source = inspect.getsource(func)
-    args = re.findall(_pat, source)[0].split('\n')
-    argstring = '**Function Arguments:**'
-    has_arg = False
-    for arg in args:
-        if '#' in arg:
+    try:
+        source = inspect.getsource(func)
+        args = re.findall(_pat, source)[0].split('\n')
+        argstring = '**Function Arguments:**'
+        has_arg = False
+        for arg in args:
+          if '#' in arg:
             has_arg = True
-        # Contains arg documentation
+            # Contains arg documentation
             arg = arg.lstrip()
             if len(arg.split(':')) > 1:
-                nm, extra = arg.split(':')
-                typ, docstr = extra.split(' # ')
-                argstring += f'\n* `{nm}`({typ}): {docstr}'
-    if has_arg: return argstring + '\n'
-    else: return ''
+              nm, extra = arg.split(':')
+              typ, docstr = extra.split(' # ')
+              argstring += f'\n* `{nm}`({typ}): {docstr}'
+          if has_arg: return argstring + '\n'
+          else: return ''
+    except: return ''
 
 # Cell
 def show_doc(elt, doc_string=True, name=None, title_level=None, disp=True, default_cls_level=2):
