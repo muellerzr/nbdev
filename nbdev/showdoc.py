@@ -263,8 +263,8 @@ def _format_args(func):
               if '=' in typ: typ = typ.split('=')[0].lstrip()
               if typ.endswith(','): typ = typ[:-1]
               typ = typ.split(',')
-              typ = [f'`{t.strip()}`,' for t in typ]
-              typ[-1] = typ[-1].strip(',')
+              typ = [f'`{t.strip()}`' for t in typ]
+              typ = ','.join(typ)
               argstring += f'\n* `{nm}`({[t for t in typ]}): {docstr}'
         if has_arg: return argstring + '\n'
         else: return ''
