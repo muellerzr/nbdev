@@ -244,8 +244,28 @@ def _format_cls_doc(cls, full_name):
     return name,args
 
 # Cell
+def _format_args(func):
+    "Generates doc string for function arguments"
+    _pat = r'\(([^\)]+)\)'
+    source = inspect.getsource(func)
+    args = re.findall(_pat, source)[0].split('\n')
+    argstring = '**Function Arguments:**'
+    has_arg = False
+    for arg in args:
+        if '#' in arg:
+            has_arg = True
+        # Contains arg documentation
+            arg = arg.lstrip()
+            if len(arg.split(':')) > 1:
+                nm, extra = arg.split(':')
+                typ, docstr = extra.split(' # ')
+                argstring += f'\n* `{nm}`({typ}): {docstr}'
+    if has_arg: return argstring + '\n'
+    else: return ''
+
+# Cell
 def show_doc(elt, doc_string=True, name=None, title_level=None, disp=True, default_cls_level=2):
-    "Show documentation for element `elt`. Supported types: class, function, and enum."
+    "Show documentation for element `elt` and its parameters. Supported types: class, function, and enum."
     elt = getattr(elt, '__func__', elt)
     qname = name or qual_name(elt)
     if inspect.isclass(elt):
@@ -266,6 +286,7 @@ def show_doc(elt, doc_string=True, name=None, title_level=None, disp=True, defau
         # doc links don't work inside markdown pre/code blocks
         s = f'```\n{s}\n```' if monospace else add_doc_links(s, elt)
         doc += s
+    if len(args) > 0: doc += f'\n\n{_format_args(elt)}'
     if disp: display(Markdown(doc))
     else: return doc
 
