@@ -261,6 +261,7 @@ def _format_args(func):
               nm, extra = arg.split(':')
               typ, docstr = extra.split(' # ')
               if '=' in typ: typ = typ.split('=')[0].lstrip()
+              if typ.endswith(','): typ = typ[:-1]
               argstring += f'\n* `{nm}`(`{typ}`): {docstr}'
         if has_arg: return argstring + '\n'
         else: return ''
