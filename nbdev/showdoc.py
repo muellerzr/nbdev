@@ -270,7 +270,7 @@ def _format_args(func):
               # Doens't have type declaration
               nm, docstr = arg.split(' # ')
               if nm.endswith(','): nm = nm[:-1]
-              argstr += f'\n* `{nm}`: {docstr}'
+              argstring += f'\n* `{nm}`: {docstr}'
         if has_arg: return argstring + '\n'
         else: return ''
     except: return ''
