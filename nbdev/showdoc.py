@@ -261,8 +261,8 @@ def _format_args(func):
               nm, extra = arg.split(':')
               typ, docstr = extra.split(' # ')
               argstring += f'\n* `{nm}`({typ}): {docstr}'
-          if has_arg: return argstring + '\n'
-          else: return ''
+        if has_arg: return argstring + '\n'
+        else: return ''
     except: return ''
 
 # Cell
