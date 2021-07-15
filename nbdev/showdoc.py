@@ -244,6 +244,15 @@ def _format_cls_doc(cls, full_name):
     return name,args
 
 # Cell
+def _check_declaration(row, func):
+    return not any(f'def ' in i for i in row['source']) and not any(f'class ' in i for i in row['source']) 
+
+# Cell
+def _check_showdoc(row):
+    "Checks if a show_doc was called"
+    return any('doc(' in i for i in row['source'])
+
+# Cell
 def _get_examples(func:str):
     "Finds examples of `func` in notebooks"
     nbs = (Path('..')/Config().nbs_path).ls()
