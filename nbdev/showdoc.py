@@ -283,17 +283,19 @@ def _get_examples(func:str):
                             varname = txt.split('=')[0].strip()
                             # Assume usage is in the next 5 cells
                             for k in range(1,5):
-                                src = data[0][1][i+k]['source']
-                                if any('export' in o for o in src):
+                                try:
+                                  src = data[0][1][i+k]['source']
+                                  if any('export' in o for o in src):
                                     break
-                                if any(varname in o for o in src):
+                                  if any(varname in o for o in src):
                                     if nm is not None:
-                                        if any(nm in o for o in src):
-                                            source += src
-                                            break
-                                    else:
+                                      if any(nm in o for o in src):
                                         source += src
                                         break
+                                    else:
+                                      source += src
+                                      break
+                                except: pass
                 source = '\n'.join(source)
                 source = source.replace('\n\n', '\n')
                 source = ''.join(source)
