@@ -262,7 +262,7 @@ def _get_examples(func:str):
         func, nm = func.split('.')
         nm += '('
     else:
-        func = func+'('
+        func = func
     for nb in nbs:
         with open(nb) as f: data = list(json.load(f).items())
         showdoc = False
