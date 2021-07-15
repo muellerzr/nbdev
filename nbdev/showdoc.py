@@ -347,7 +347,7 @@ def _show_examples(examples):
     "Renders examples"
     random.shuffle(examples)
     text = "**Usage Examples:**\n\n"
-    text += '<details>\n'
+    text += '<details class="description">\n'
     text += '<summary markdown="span">Click Me to Show Code Examples</summary>\n'
     for nb, code in examples[:3]:
         s = Config().git_url.replace('github.com', 'nbviewer.jupyter.org/github')+ Config().path("nbs_path").name+f'/{nb}'
