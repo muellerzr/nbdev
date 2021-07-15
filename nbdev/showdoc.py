@@ -348,7 +348,7 @@ def _show_examples(examples):
     random.shuffle(examples)
     text = "**Usage Examples:**\n\n"
     for nb, code in examples[:3]:
-        s = Config().git_url.replace('github.com', 'nbviewer.jupyter.org/github')+ Config().path("nbs_path").name+f'/{nb}')
+        s = Config().git_url.replace('github.com', 'nbviewer.jupyter.org/github')+ Config().path("nbs_path").name+f'/{nb}'
         text += f'[Source]({s})'
         text += '```python\n'
         text += code
