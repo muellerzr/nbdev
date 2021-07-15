@@ -273,7 +273,7 @@ def _get_examples(func:str):
             if any(func in j for j in row['source']) and _check_declaration(row, func):
                 if any(o.startswith('#') for o in row['source']): 
                     if not any('hide' in o for o in row['source']) and not any('export' in o for o in row['source']):
-                      if not 'from' in row['source'][-1] and not 'import' in row['source'][-1]:
+                      if not any('from' in o for o in row['source']) and not any('import' in o for o in row['source']):
                         continue # Header declaration/sections
                 if any(f'`{func}`' in o for o in row['source']): continue # Function is in markdown
                 source = row['source'].copy()
