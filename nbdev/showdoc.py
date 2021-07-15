@@ -349,7 +349,7 @@ def _show_examples(examples):
     text = "**Usage Examples:**\n\n"
     for nb, code in examples[:3]:
         s = Config().git_url.replace('github.com', 'nbviewer.jupyter.org/github')+ Config().path("nbs_path").name+f'/{nb}'
-        text += f'[Source]({s})'
+        text += f'<h4 class="doc_header">Source{s}</h4>\n'
         text += '```python\n'
         text += code
         text += '\n```'
