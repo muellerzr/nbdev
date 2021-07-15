@@ -300,7 +300,7 @@ def _get_examples(func:str):
                 source = source.replace('\n\n', '\n')
                 source = ''.join(source)
                 if nm is not None:
-                    if nm in source:
+                    if f'.{nm}' in source:
                         examples.append([nb.name, source])
                 else:
                     examples.append([nb.name, source])
