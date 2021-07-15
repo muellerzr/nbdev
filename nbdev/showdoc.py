@@ -255,7 +255,7 @@ def _check_showdoc(row):
 # Cell
 def _get_examples(func:str):
     "Finds examples of `func` in notebooks"
-    nbs = (Path('..')/Config().nbs_path).ls()
+    nbs = nbglob()
     examples = []
     nm = None
     if '.' in func:
