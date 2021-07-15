@@ -246,7 +246,7 @@ def _format_cls_doc(cls, full_name):
 # Cell
 def _get_examples(func:str):
     "Finds examples of `func` in notebooks"
-    nbs = (Path('..')/Config()['nbs_path']).ls()
+    nbs = (Path('..')/Config().nbs_path).ls()
     examples = []
     nm = None
     if '.' in func:
