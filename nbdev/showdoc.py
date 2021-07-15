@@ -335,7 +335,7 @@ def _format_args(func):
               if nm.endswith(','): nm = nm[:-1]
               argstring += f'\n* `{nm}`: {docstr}'
         if '->' in source:
-           retstring = '**Returns**:
+           retstring = '**Returns**:'
            
         if has_arg: return argstring + '\n'
         else: return ''
