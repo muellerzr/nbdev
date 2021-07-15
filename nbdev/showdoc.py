@@ -313,7 +313,7 @@ def _format_args(func):
     try:
         source = inspect.getsource(func)
         args = re.findall(_pat, source)[0].split('\n')
-        argstring = '**Function Arguments:**'
+        argstring = '**Function Arguments**:'
         has_arg = False
         for arg in args:
           if '#' in arg:
@@ -330,10 +330,13 @@ def _format_args(func):
               typ = ', '.join(typ).strip('[').strip(']')
               argstring += f'\n* `{nm}` ({typ}): {docstr}'
             else:
-              # Doens't have type declaration
+              # Doesn't have type declaration
               nm, docstr = arg.split(' # ')
               if nm.endswith(','): nm = nm[:-1]
               argstring += f'\n* `{nm}`: {docstr}'
+        if '->' in source:
+           retstring = '**Returns**:
+           
         if has_arg: return argstring + '\n'
         else: return ''
     except: return ''
@@ -345,7 +348,8 @@ def _show_examples(examples):
     random.shuffle(examples)
     text = "**Usage Examples:**\n\n"
     for nb, code in examples[:3]:
-        text += f'Source: {nb}\n'
+        s = Config().git_url.replace('github.com', 'nbviewer.jupyter.org/github')+ Config().path("nbs_path").name+f'/{nb}')
+        text += f'[Source]({s})'
         text += '```python\n'
         text += code
         text += '\n```'
