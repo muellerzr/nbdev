@@ -245,7 +245,7 @@ def _format_cls_doc(cls, full_name):
 
 # Cell
 def _check_declaration(row, func):
-    return not any(f'def ' in i for i in row['source']) and not any(f'class ' in i for i in row['source']) 
+    return not any(f'def ' in i for i in row['source']) and not any(f'class ' in i for i in row['source'])  and not any('from' in i for i in row['source']) and not any('import' in i for i in row['source'])
 
 # Cell
 def _check_showdoc(row):
@@ -273,7 +273,6 @@ def _get_examples(func:str):
             if any(func in j for j in row['source']) and _check_declaration(row, func):
                 if any(o.startswith('#') for o in row['source']): 
                     if not any('hide' in o for o in row['source']) and not any('export' in o for o in row['source']):
-                      if not any('from' in o for o in row['source']) and not any('import' in o for o in row['source']):
                         continue # Header declaration/sections
                 if any(f'`{func}`' in o for o in row['source']): continue # Function is in markdown
                 source = row['source'].copy()
