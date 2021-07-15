@@ -244,6 +244,60 @@ def _format_cls_doc(cls, full_name):
     return name,args
 
 # Cell
+def _get_examples(func:str):
+    "Finds examples of `func` in notebooks"
+    nbs = Path(Config().nbs_path).ls()
+    examples = []
+    nm = None
+    if '.' in func:
+        func, nm = func.split('.')
+    else:
+        func = func+'('
+    for nb in nbs:
+        with open(nb) as f: data = list(json.load(f).items())
+        showdoc = False
+        for i, row in enumerate(data[0][1]):
+            if showdoc: 
+                showdoc = False
+                continue
+            if _check_showdoc(row):
+                showdoc = True
+                continue
+            if any(func in j for j in row['source']) and _check_declaration(row, func):
+                if any(o.startswith('#') for o in row['source']): 
+                    if not any('hide' in o for o in row['source']) and not any('export' in o for o in row['source']):
+                        continue # Header declaration/sections
+                if any(f'`{func}`' in o for o in row['source']): continue # Function is in markdown
+                source = row['source'].copy()
+                if any(f'= {func}' in o for o in row['source']):
+                    varname = ''
+                    for txt in row['source']: 
+                        if f'= {func}' in txt and func in txt: 
+                            varname = txt.split('=')[0].strip()
+                            # Assume usage is in the next 5 cells
+                            for k in range(1,5):
+                                src = data[0][1][i+k]['source']
+                                if any('export' in o for o in src):
+                                    break
+                                if any(varname in o for o in src):
+                                    if nm is not None:
+                                        if any(nm in o for o in src):
+                                            source += src
+                                            break
+                                    else:
+                                        source += src
+                                        break
+                source = '\n'.join(source)
+                source = source.replace('\n\n', '\n')
+                source = ''.join(source)
+                if nm is not None:
+                    if nm in source:
+                        examples.append([nb.name, source])
+                else:
+                    examples.append([nb.name, source])
+    return examples
+
+# Cell
 def _format_args(func):
     "Generates doc string for function arguments"
     _pat = r'\(([^\)]+)\)'
@@ -276,6 +330,20 @@ def _format_args(func):
     except: return ''
 
 # Cell
+import random
+def _show_examples(examples):
+    "Renders examples"
+    random.shuffle(examples)
+    text = "**Usage Examples:**\n\n"
+    for nb, code in examples[:3]:
+        text += f'Source: {nb}\n'
+        text += '```python\n'
+        text += code
+        text += '\n```'
+        text += '\n'
+    return text
+
+# Cell
 def show_doc(elt, doc_string=True, name=None, title_level=None, disp=True, default_cls_level=2):
     "Show documentation for element `elt` and its parameters. Supported types: class, function, and enum."
     elt = getattr(elt, '__func__', elt)
@@ -299,6 +367,8 @@ def show_doc(elt, doc_string=True, name=None, title_level=None, disp=True, defau
         s = f'```\n{s}\n```' if monospace else add_doc_links(s, elt)
         doc += s
     if len(args) > 0: doc += f'\n\n{_format_args(elt)}'
+    examples = _get_examples(qname)
+    if len(examples) > 0: doc += f'\n\n{_show_examples(examples)}'
     if disp: display(Markdown(doc))
     else: return doc
 
