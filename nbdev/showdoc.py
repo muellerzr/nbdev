@@ -348,6 +348,7 @@ def _show_examples(examples):
     random.shuffle(examples)
     text = "**Usage Examples:**\n\n"
     text += '<details>\n'
+    text += '<summary markdown="span">Click Me to Show Code Examples</summary>
     for nb, code in examples[:3]:
         s = Config().git_url.replace('github.com', 'nbviewer.jupyter.org/github')+ Config().path("nbs_path").name+f'/{nb}'
         text += f'<b><a href={s}>Source</a></b>\n'
